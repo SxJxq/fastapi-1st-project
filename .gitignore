@@ -1,4 +1,4 @@
-/venv
-/pycache
-*.pyc
-.env
+/venv #because anyone can create a virtual environment
+/__pycache__  #it generates automatically with python code
+*.pyc #it generates automatically with python code
+.env #it contains sensitive data 
