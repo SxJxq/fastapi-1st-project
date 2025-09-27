@@ -15,20 +15,18 @@ class PostBase(BaseModel):# common between req and res
 
 
 
-
-
-
-
 class PostCreate(PostBase):#req input schema, if i wanted the user to send me some data but i dont want it to be returned to them
     pass 
 
 
 
-# class Post(PostBase):#res, fields r from the database, output schema
-#     id: int
-#     created_at: datetime
-#     owner_id: int 
+class Post(PostBase):#res, fields r from the database, output schema
+    id: int
+    # created_at: datetime
+    # owner_id: int 
 
-#     class Config:#transforming obj from sqlalchemy to json
-#         orm_mode= True 
+    class Config:#transforming obj from sqlalchemy to json
+        from_attributes = True
+    
+
 
