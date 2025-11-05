@@ -1,11 +1,12 @@
 # to sepetare the schema modles from the rest of the code
 #PYDANTIC MODELS 
 #pydanyic modles so we tell the frontend devs what to expect
-from pydantic import BaseModel
-import datetime
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
 
 
 
+#POST SCHEMAS
 class PostBase(BaseModel):# common between req and res
     title: str
     content: str
@@ -28,5 +29,21 @@ class Post(PostBase):#res, fields r from the database, output schema
     class Config:#transforming obj from sqlalchemy to json
         from_attributes = True
     
+
+#USER SCHEMAS
+#for input
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+#returned to the user
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    class Config:#transforming obj from sqlalchemy to json
+        from_attributes = True
+
 
 
