@@ -1,6 +1,7 @@
 # to sepetare the schema modles from the rest of the code
 #PYDANTIC MODELS 
 #pydanyic modles so we tell the frontend devs what to expect
+
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
@@ -44,6 +45,10 @@ class UserOut(BaseModel):
 
     class Config:#transforming obj from sqlalchemy to json
         from_attributes = True
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str 
 
 
 

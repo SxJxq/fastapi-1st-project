@@ -22,7 +22,6 @@ def create_user(user:schemas.UserCreate, db: Session = Depends(database.get_db))
     try:
         db.commit()
         db.refresh(new_user)
-        return new_user
     
     except IntegrityError:
         db.rollback()
