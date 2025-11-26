@@ -24,6 +24,10 @@ class PostCreate(PostBase):#req input schema, if i wanted the user to send me so
 
 class Post(PostBase):#res, fields r from the database, output schema
     id: int
+    title: str
+    content: str
+    published: bool
+    owner_id: int
     # created_at: datetime
     # owner_id: int 
 
@@ -60,6 +64,7 @@ class Token(BaseModel):
 #data extracted from the jwt (user id)
 class TokenData(BaseModel):
     id: Optional[str] = None #it might return None
+    
 
 
 

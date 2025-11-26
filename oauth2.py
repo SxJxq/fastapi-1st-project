@@ -5,7 +5,7 @@ import schemas
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-oauth2_schema=OAuth2PasswordBearer(tokenUrl='login')#Defines how Fastapi exctracts the token, when someone logs in, they get tokens from /login
+oauth2_schema = OAuth2PasswordBearer(tokenUrl='login')#Defines how Fastapi exctracts the token, when someone logs in, they get tokens from /login
 
 SECRET_KEY="solasala558" #signing the jwt
 ALGORITHM="HS256"#how the token is generated, encryption algorithm

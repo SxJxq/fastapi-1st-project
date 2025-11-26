@@ -26,7 +26,7 @@ def get_posts(db: Session=Depends(get_db), current_user: models.User = Depends(o
 @router.post("/", response_model=schemas.Post, status_code=status.HTTP_201_CREATED)
 def create_post(post: schemas.PostCreate, db: Session=Depends(get_db), current_user: models.User = Depends(oauth2.get_current_user)):# data validation
 
-    new_post=models.Post(**post.model_dump())#convert s sqlalchemy model into dictionary
+    new_post=models.Post(owner_id = current_user.id, **post.model_dump())#convert s sqlalchemy model into dictionary
     
     db.add(new_post)
     db.commit()
@@ -55,6 +55,9 @@ def delete_post(id: int, db: Session=Depends(get_db), current_user: models.User 
     if deleted_post.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {id} wasnt found")
     
+    if deleted_post.owner_id != current_user.id: #if logged in user isnt the owner
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail= "Unauthorized")
+    
     
     
     deleted_post.delete(synchronize_session=False)
@@ -71,6 +74,9 @@ def update_post(id: int, post: schemas.PostCreate, db: Session=Depends(get_db), 
 
     if updated_post.first() == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id {id} wasnt found")
+    
+    if updated_post.owner_id != current_user.id: #if logged in user isnt the owner
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail= "Unauthorized")
     
     updated_post.update(post.model_dump(), synchronize_session=False)
     db.commit()
