@@ -2,7 +2,7 @@
 #PYDANTIC MODELS 
 #pydanyic modles so we tell the frontend devs what to expect
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, conint
 from datetime import datetime
 from typing import Optional
 
@@ -63,7 +63,11 @@ class Token(BaseModel):
 
 #data extracted from the jwt (user id)
 class TokenData(BaseModel):
-    id: Optional[str] = None #it might return None
+    id: Optional[int] = None #it might return None
+
+class Vote(BaseModel):
+    post_id: int
+    dir: conint(le=1, ge=0) #1-> vote, 0->unvote
     
 
 

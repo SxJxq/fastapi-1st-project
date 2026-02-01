@@ -1,4 +1,4 @@
-#authentication/login router
+#authentication/login routers
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 import models, schemas
@@ -15,7 +15,7 @@ router = APIRouter(
 def login(user_cred: OAuth2PasswordRequestForm = Depends(), db: Session=Depends(get_db)):
 
     #find user with same email
-    user=db.query(models.User).filter(models.User.email == user_cred.email).first()
+    user=db.query(models.User).filter(models.User.email == user_cred.username).first()
 
     if not user:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credinteals")

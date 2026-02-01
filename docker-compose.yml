@@ -1,0 +1,63 @@
+# Specify the version of docker-compose syntax
+version: "3.9"
+
+# Define the services (containers) we want to run
+services:
+
+  # ---- FastAPI API service ----
+  api:
+    # Build the Docker image for this service from the current directory
+    build: .
+
+    # Map the container port to the host machine port
+    # Format: "host_port:container_port"
+    ports:
+      - "8000:8000"
+
+    # Ensure that the postgres service starts before this service
+    # Now waits for the healthcheck to pass
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    env_file:
+      - .env
+
+    # Environment variables for the API
+    environment:
+      # Database URL for FastAPI to connect to Postgres
+      # Format: postgres://username:password@hostname:port/dbname
+      DATABASE_HOSTNAME: postgres
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: 7364
+      DATABASE_NAME: fastapi
+      DATABASE_USERNAME: postgres
+
+  # ---- PostgreSQL database service ----
+  postgres:
+    # Use the official Postgres image version 15
+    image: postgres:15
+
+    # Set environment variables for Postgres
+    environment:
+      # Password for the default 'postgres' user
+      POSTGRES_PASSWORD: 7364
+      # Automatically create this database on container start
+      POSTGRES_DB: fastapi
+
+    # Mount a volume so data persists even if the container stops
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+    # Add healthcheck so other services wait until Postgres is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s        # check every 5 seconds
+      timeout: 5s         # command must complete in 5 seconds
+      retries: 5          # fail after 5 unsuccessful tries
+      start_period: 5s    # wait 5 seconds before starting checks
+
+# ---- Volumes ----
+# Define named volumes that can be shared between containers or persist data
+volumes:
+  postgres-db:
