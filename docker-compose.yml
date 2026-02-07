@@ -20,8 +20,10 @@ services:
       postgres:
         condition: service_healthy
 
+    #injects variables into container, makes them available to FastAPI, and then config reads them
     env_file:
       - .env
+      
 
     # Environment variables for the API
     environment:

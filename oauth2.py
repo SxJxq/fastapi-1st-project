@@ -4,13 +4,14 @@ from datetime import datetime, timedelta
 import schemas
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+from config import settings
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')#Defines how Fastapi exctracts the token, when someone logs in, they get tokens from /login
 
-SECRET_KEY="solasala558" #signing the jwt
-ALGORITHM="HS256"#how the token is generated, encryption algorithm
-ACCESS_TOKEN_EXPIRE_MINUTES=30 #token is valid 4 30 mins
-
+SECRET_KEY=settings.secret_key #signing the jwt
+ALGORITHM=settings.algorithm#how the token is generated, encryption algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES=settings.access_token_expire_minutes #token is valid 4 30 mins
 
 #token from client to api, takes user info "id" and then returns a signed jwt token
 def create_access_token(data: dict):# jwt payload must be a directory
